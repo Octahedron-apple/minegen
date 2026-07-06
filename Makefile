@@ -1,5 +1,6 @@
 CUBIOMES_DIR = ./deps/cubiomes
 OUTPUT_LIB  = ./libcubiomes.so
+WRAPPER_LIB = ./tests/libcubiomes_wrapper.so
 
 SRCS = $(CUBIOMES_DIR)/biomenoise.c \
        $(CUBIOMES_DIR)/biomes.c \
@@ -16,10 +17,13 @@ LDFLAGS = -lm -lpthread
 
 .PHONY: all clean
 
-all: $(OUTPUT_LIB)
+all: $(OUTPUT_LIB) $(WRAPPER_LIB)
 
 $(OUTPUT_LIB): $(SRCS)
 	$(CC) $(CFLAGS) -o $(OUTPUT_LIB) $(SRCS) $(LDFLAGS)
 
+$(WRAPPER_LIB): ./tests/test_wrapper.c $(SRCS)
+	$(CC) $(CFLAGS) -o $(WRAPPER_LIB) ./tests/test_wrapper.c $(SRCS) $(LDFLAGS)
+
 clean:
-	rm -f $(OUTPUT_LIB)
+	rm -f $(OUTPUT_LIB) $(WRAPPER_LIB)
